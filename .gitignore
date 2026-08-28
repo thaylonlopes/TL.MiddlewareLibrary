@@ -1,0 +1,51 @@
+## Arquivos e Pastas Ocultas Locais (com exceções do projeto)
+.*
+!.gitignore
+!.editorconfig
+!.github/
+!.github/**
+!.template.config/
+!.template.config/**
+
+## Build Results and Binary Outputs
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+TestResults/
+[Bb]uild/
+[Dd]ist/
+
+## Visual Studio & IDEs Específicos
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.launchSettings.json
+*.dbmdl
+*.jfm
+_ReSharper*/
+*.DotSettings.user
+
+## NuGet Packages and Caches
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+packages/
+project.lock.json
+project.assets.json
+
+## Crash Dumps & Profiling
+*.dmp
+*.mdmp
+*.stackdump
+
+## OS & Temporary Files
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+*.tmp
+*.temp

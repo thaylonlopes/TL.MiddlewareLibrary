@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net8.0;net9.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    
+    <PackageId>TL.MiddlewareLibrary</PackageId>
+    <Version>0.0.1-beta.2</Version>
+    <Authors>Thaylon Lopes</Authors>
+    <Company>Thaylon Lopes</Company>
+    <Title>TL.MiddlewareLibrary</Title>
+    <Description>Biblioteca modular de middlewares para ASP.NET Core (.NET 6, .NET 8 e .NET 9) com foco em diagnósticos de latência, controle de taxa por IP, cache em memória e padronização de respostas de erro com ProblemDetails.</Description>
+    <PackageTags>aspnetcore;middleware;problem-details;rate-limiting;caching;timing;authentication;http</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="*.cs" />
+    <Compile Include="Exceptions\*.cs" />
+    <Compile Include="Extensions\*.cs" />
+    <Compile Include="Models\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+</Project>
