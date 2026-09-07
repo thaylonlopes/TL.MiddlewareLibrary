@@ -18,7 +18,6 @@ namespace MiddlewareLibrary.Tests
         [Fact]
         public async Task InvokeAsync_WhenAuthorizationHeaderIsMissing_ShouldReturn401ProblemDetails()
         {
-            // Arrange
             var context = new DefaultHttpContext();
             context.TraceIdentifier = "auth-trace-1";
             context.Request.Path = "/api/seguro";
@@ -28,10 +27,8 @@ namespace MiddlewareLibrary.Tests
             RequestDelegate next = _ => Task.CompletedTask;
             var middleware = new AuthenticationMiddleware(next, _loggerMock.Object);
 
-            // Act
             await middleware.InvokeAsync(context);
 
-            // Assert
             Assert.Equal(401, context.Response.StatusCode);
             Assert.Equal("application/problem+json", context.Response.ContentType);
 
@@ -48,7 +45,6 @@ namespace MiddlewareLibrary.Tests
         [Fact]
         public async Task InvokeAsync_WhenValidBearerTokenProvided_ShouldPassToNextMiddleware()
         {
-            // Arrange
             var context = new DefaultHttpContext();
             context.Request.Headers["Authorization"] = "Bearer valid_jwt_token_sample";
 
@@ -61,10 +57,8 @@ namespace MiddlewareLibrary.Tests
 
             var middleware = new AuthenticationMiddleware(next, _loggerMock.Object);
 
-            // Act
             await middleware.InvokeAsync(context);
 
-            // Assert
             Assert.True(executed);
         }
     }

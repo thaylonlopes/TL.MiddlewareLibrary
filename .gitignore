@@ -18,6 +18,8 @@
 TestResults/
 [Bb]uild/
 [Dd]ist/
+[Aa]rtifacts/
+BenchmarkDotNet.Artifacts/
 
 ## Visual Studio & IDEs Específicos
 *.suo

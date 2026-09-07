@@ -7,15 +7,15 @@
     <Nullable>enable</Nullable>
     
     <PackageId>TL.MiddlewareLibrary</PackageId>
-    <Version>0.0.1-beta.2</Version>
+    <Version>0.1.0</Version>
     <Authors>Thaylon Lopes</Authors>
     <Company>Thaylon Lopes</Company>
     <Title>TL.MiddlewareLibrary</Title>
     <Description>Biblioteca modular de middlewares para ASP.NET Core (.NET 6, .NET 8 e .NET 9) com foco em diagnósticos de latência, controle de taxa por IP, cache em memória e padronização de respostas de erro com ProblemDetails.</Description>
     <PackageTags>aspnetcore;middleware;problem-details;rate-limiting;caching;timing;authentication;http;zero-allocation</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/thaylonlopes/MiddlewareLibrary</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/thaylonlopes/MiddlewareLibrary</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/thaylonlopes/TL.MiddlewareLibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/thaylonlopes/TL.MiddlewareLibrary</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageIcon>icon.png</PackageIcon>

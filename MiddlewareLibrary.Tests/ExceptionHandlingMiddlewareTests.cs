@@ -19,7 +19,6 @@ namespace MiddlewareLibrary.Tests
         [Fact]
         public async Task InvokeAsync_WhenUnhandledExceptionOccurs_ShouldCatchAndReturn500ProblemDetails()
         {
-            // Arrange
             var context = new DefaultHttpContext();
             context.TraceIdentifier = "trace-catch-all";
             context.Request.Path = "/api/crash";
@@ -29,10 +28,8 @@ namespace MiddlewareLibrary.Tests
             RequestDelegate next = _ => throw new ApplicationException("Erro catastrófico não tratado.");
             var middleware = new ExceptionHandlingMiddleware(next, _loggerMock.Object);
 
-            // Act
             await middleware.InvokeAsync(context);
 
-            // Assert
             Assert.Equal(500, context.Response.StatusCode);
             Assert.Equal("application/problem+json", context.Response.ContentType);
 
@@ -50,7 +47,6 @@ namespace MiddlewareLibrary.Tests
         [Fact]
         public async Task InvokeAsync_WhenNoExceptionOccurs_ShouldExecuteDownstreamDelegateSuccessfully()
         {
-            // Arrange
             var context = new DefaultHttpContext();
             var executed = false;
 
@@ -62,10 +58,8 @@ namespace MiddlewareLibrary.Tests
 
             var middleware = new ExceptionHandlingMiddleware(next, _loggerMock.Object);
 
-            // Act
             await middleware.InvokeAsync(context);
 
-            // Assert
             Assert.True(executed);
         }
     }
