@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     
     <PackageId>TL.MiddlewareLibrary</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>Thaylon Lopes</Authors>
     <Company>Thaylon Lopes</Company>
     <Title>TL.MiddlewareLibrary</Title>

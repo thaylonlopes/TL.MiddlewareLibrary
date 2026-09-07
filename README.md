@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="assets/icon.svg" alt="TL Middleware Icon" width="128" height="128" />
-</p>
-
 # 🚀 TL.MiddlewareLibrary
 
 [![.NET](https://img.shields.io/badge/.NET-net6.0%20%7C%20net8.0%20%7C%20net9.0-blue.svg)](https://dotnet.microsoft.com/)
@@ -170,18 +166,13 @@ Abra seu navegador na URL indicada pelo terminal (ex: `http://localhost:5000` ou
 
 A biblioteca foi projetada com foco em **zero-allocation** no *hot path*, pooling de memória e alta vazão concorrente. A solução possui **6 suítes de micro-benchmarks científicos** auditados via **BenchmarkDotNet**:
 
-<p align="center">
-  <img src="assets/benchmark-terminal.png" alt="Evidência de Execução Real no Terminal com BenchmarkDotNet" width="100%" />
-</p>
+![Evidência de Execução Real no Terminal com BenchmarkDotNet](https://raw.githubusercontent.com/thaylonlopes/TL.MiddlewareLibrary/main/assets/benchmark-terminal.png)
 
 ```bash
 dotnet run -c Release --project benchmarks/MiddlewareLibrary.Benchmarks
 ```
 
-<details>
-<summary><b>📊 Ver detalhamento técnico e catálogo dos 6 cenários (Clique para expandir)</b></summary>
-
-<br />
+### 📊 Detalhamento Técnico dos 6 Cenários de Benchmark
 
 | Benchmark | Métrica Avaliada | Destaque Técnico |
 | :--- | :--- | :--- |
@@ -191,8 +182,6 @@ dotnet run -c Release --project benchmarks/MiddlewareLibrary.Benchmarks
 | **`RateLimitingBenchmarks`** | Vazão e contenção do bloqueio de IP concorrente em memória | Operação thread-safe em nanossegundos com zero alocação adicional. |
 | **`ProblemDetailsSerializationBenchmarks`** | Serialização JSON do ProblemDetails e pattern matching de 12 exceções | Resolução instantânea do switch tipado com baixo consumo de CPU. |
 | **`CacheKeyGenerationBenchmarks`** | Concatenação de Método + Rota + QueryString | Otimização na formação de chaves de cache para diferentes tamanhos de URL. |
-
-</details>
 
 ---
 
