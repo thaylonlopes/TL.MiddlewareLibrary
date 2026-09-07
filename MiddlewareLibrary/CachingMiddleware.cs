@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Buffers;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MiddlewareLibrary.Middlewares
@@ -12,6 +14,7 @@ namespace MiddlewareLibrary.Middlewares
     /// </summary>
     public class CachingMiddleware
     {
+        private const int DefaultBufferSize = 4096;
         private readonly RequestDelegate _next;
         private readonly IMemoryCache _cache;
         private readonly ILogger<CachingMiddleware> _logger;
@@ -37,7 +40,7 @@ namespace MiddlewareLibrary.Middlewares
         }
 
         /// <summary>
-        /// Executa o fluxo de verificação e armazenamento de cache HTTP.
+        /// Executa o fluxo de verificação e armazenamento de cache HTTP com pooling de buffers de memória.
         /// </summary>
         /// <param name="context">Contexto HTTP da requisição.</param>
         public async Task InvokeAsync(HttpContext context)
@@ -70,22 +73,47 @@ namespace MiddlewareLibrary.Middlewares
 
                 if (context.Response.StatusCode == StatusCodes.Status200OK)
                 {
-                    responseBodyStream.Seek(0, SeekOrigin.Begin);
-                    var responseText = await new StreamReader(responseBodyStream).ReadToEndAsync();
-                    responseBodyStream.Seek(0, SeekOrigin.Begin);
-
-                    if (!string.IsNullOrEmpty(responseText))
-                    {
-                        _cache.Set(cacheKey, responseText, _cacheDuration);
-                        _logger.LogInformation("Resposta armazenada em cache para a chave: {CacheKey} com TTL de {TTL}", cacheKey, _cacheDuration);
-                    }
+                    await CacheResponseBodyAsync(cacheKey, responseBodyStream);
                 }
 
-                await responseBodyStream.CopyToAsync(originalBodyStream);
+                await CopyStreamWithBufferPoolAsync(responseBodyStream, originalBodyStream);
             }
             finally
             {
                 context.Response.Body = originalBodyStream;
+            }
+        }
+
+        private async Task CacheResponseBodyAsync(string cacheKey, MemoryStream stream)
+        {
+            stream.Seek(0, SeekOrigin.Begin);
+            using var reader = new StreamReader(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, bufferSize: DefaultBufferSize, leaveOpen: true);
+            var responseText = await reader.ReadToEndAsync();
+            stream.Seek(0, SeekOrigin.Begin);
+
+            if (!string.IsNullOrEmpty(responseText))
+            {
+                _cache.Set(cacheKey, responseText, _cacheDuration);
+                _logger.LogInformation("Resposta armazenada em cache para a chave: {CacheKey} com TTL de {TTL}", cacheKey, _cacheDuration);
+            }
+        }
+
+        private static async Task CopyStreamWithBufferPoolAsync(Stream source, Stream destination)
+        {
+            source.Seek(0, SeekOrigin.Begin);
+            var pool = ArrayPool<byte>.Shared;
+            byte[] buffer = pool.Rent(DefaultBufferSize);
+            try
+            {
+                int bytesRead;
+                while ((bytesRead = await source.ReadAsync(buffer.AsMemory(0, buffer.Length))) > 0)
+                {
+                    await destination.WriteAsync(buffer.AsMemory(0, bytesRead));
+                }
+            }
+            finally
+            {
+                pool.Return(buffer);
             }
         }
 

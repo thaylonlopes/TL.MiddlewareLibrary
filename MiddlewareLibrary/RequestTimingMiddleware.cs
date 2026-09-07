@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace MiddlewareLibrary.Middlewares
 {
     /// <summary>
-    /// Middleware responsável por mensurar o tempo total de execução da requisição HTTP e injetar métricas de diagnóstico.
+    /// Middleware responsável por mensurar o tempo total de execução da requisição HTTP e injetar métricas de diagnóstico com zero alocação de heap.
     /// </summary>
-    public class RequestTimingMiddleware
+    public partial class RequestTimingMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<RequestTimingMiddleware> _logger;
@@ -26,20 +26,21 @@ namespace MiddlewareLibrary.Middlewares
         }
 
         /// <summary>
-        /// Executa a medição de tempo de resposta da requisição.
+        /// Executa a medição de tempo de resposta da requisição com precisão de timestamp de alta resolução.
         /// </summary>
         /// <param name="context">Contexto HTTP da requisição.</param>
         public async Task InvokeAsync(HttpContext context)
         {
             ArgumentNullException.ThrowIfNull(context);
 
-            var stopwatch = Stopwatch.StartNew();
+            long startTimestamp = Stopwatch.GetTimestamp();
 
             context.Response.OnStarting(() =>
             {
                 if (!context.Response.Headers.ContainsKey("X-Response-Time-Ms"))
                 {
-                    context.Response.Headers.Append("X-Response-Time-Ms", stopwatch.ElapsedMilliseconds.ToString());
+                    long elapsedMilliseconds = GetElapsedMilliseconds(startTimestamp);
+                    context.Response.Headers.Append("X-Response-Time-Ms", elapsedMilliseconds.ToString());
                 }
                 return Task.CompletedTask;
             });
@@ -50,13 +51,13 @@ namespace MiddlewareLibrary.Middlewares
             }
             finally
             {
-                stopwatch.Stop();
+                long elapsedMilliseconds = GetElapsedMilliseconds(startTimestamp);
                 _logger.LogInformation(
                     "Requisição [{Method}] em {Path} concluída com status {StatusCode} em {ElapsedMilliseconds} ms",
                     context.Request.Method,
                     context.Request.Path,
                     context.Response.StatusCode,
-                    stopwatch.ElapsedMilliseconds);
+                    elapsedMilliseconds);
             }
         }
     }

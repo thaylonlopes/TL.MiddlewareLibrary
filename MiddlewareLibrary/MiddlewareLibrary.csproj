@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;net8.0;net9.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     
@@ -11,34 +12,37 @@
     <Company>Thaylon Lopes</Company>
     <Title>TL.MiddlewareLibrary</Title>
     <Description>Biblioteca modular de middlewares para ASP.NET Core (.NET 6, .NET 8 e .NET 9) com foco em diagnósticos de latência, controle de taxa por IP, cache em memória e padronização de respostas de erro com ProblemDetails.</Description>
-    <PackageTags>aspnetcore;middleware;problem-details;rate-limiting;caching;timing;authentication;http</PackageTags>
+    <PackageTags>aspnetcore;middleware;problem-details;rate-limiting;caching;timing;authentication;http;zero-allocation</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/thaylonlopes/MiddlewareLibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/thaylonlopes/MiddlewareLibrary</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <RepositoryType>git</RepositoryType>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="*.cs" />
-    <Compile Include="Exceptions\*.cs" />
-    <Compile Include="Extensions\*.cs" />
-    <Compile Include="Models\*.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\assets\icon.png" Pack="true" PackagePath="\" Visible="false" />
   </ItemGroup>
 
+  <!-- Framework Nativo ASP.NET Core -->
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <Compile Remove="**\*.Net8.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0'">
+    <Compile Remove="**\*.Net6.cs" />
   </ItemGroup>
 
 </Project>

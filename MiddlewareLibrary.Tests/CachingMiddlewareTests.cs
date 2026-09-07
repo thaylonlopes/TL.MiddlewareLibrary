@@ -120,6 +120,29 @@ public class CachingMiddlewareTests
         Assert.Equal(2, executionCount);
     }
 
+    [Fact]
+    public async Task InvokeAsync_WhenLargePayloadReturned_ShouldBufferAndCopyCorrectlyUsingArrayPool()
+    {
+        var largePayload = new string('A', 32 * 1024);
+        RequestDelegate next = async ctx =>
+        {
+            ctx.Response.StatusCode = StatusCodes.Status200OK;
+            ctx.Response.ContentType = "text/plain";
+            await ctx.Response.WriteAsync(largePayload);
+        };
+
+        var middleware = new CachingMiddleware(next, _memoryCache, _loggerMock.Object);
+        var context = CreateHttpContext("GET", "/api/dados-pesados");
+
+        await middleware.InvokeAsync(context);
+
+        context.Response.Body.Seek(0, SeekOrigin.Begin);
+        var responseBody = await new StreamReader(context.Response.Body, Encoding.UTF8).ReadToEndAsync();
+
+        Assert.Equal(largePayload.Length, responseBody.Length);
+        Assert.Equal(largePayload, responseBody);
+    }
+
     private static DefaultHttpContext CreateHttpContext(string method, string path, string queryString = "")
     {
         var context = new DefaultHttpContext();
