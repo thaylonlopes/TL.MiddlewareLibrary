@@ -1,7 +1,9 @@
 ## Arquivos e Pastas Ocultas Locais (com exceções do projeto)
 .*
 !.gitignore
+!.gitattributes
 !.editorconfig
+!.dockerignore
 !.github/
 !.github/**
 !.template.config/
