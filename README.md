@@ -149,6 +149,23 @@ app.Run();
 
 ---
 
+## 🎮 Executando o Showcase Interativo
+
+Para ver todos os 6 middlewares operando juntos em tempo real com documentação Swagger / OpenAPI interativa:
+
+```bash
+dotnet run --project examples/MiddlewareLibrary.Showcase
+```
+
+Abra seu navegador na URL indicada pelo terminal (ex: `http://localhost:5000` ou `http://localhost:5299`) para explorar a interface Swagger e testar ao vivo:
+- **`GET /api/demo/ok`**: Demonstra o cabeçalho `X-Response-Time-Ms` com tempo de resposta em tempo real.
+- **`GET /api/demo/cache`**: Demonstra cache em memória de 30 segundos variando por parâmetro `?categoria=X`.
+- **`GET /api/demo/rate-limit`**: Teste de saturação retornando status 429 após 5 requisições em 30 segundos.
+- **`GET /api/demo/auth-protected`**: Demonstra a validação do cabeçalho `Authorization: Bearer <token>`.
+- **`GET /api/demo/exceptions/{tipo}`**: Disparo de exceções de negócio com tradução automática para ProblemDetails.
+
+---
+
 ## 🛡️ Catálogo de Exceções de Domínio
 
 A biblioteca disponibiliza 12 exceções prontas para uso. Quando lançadas no seu serviço, o `StatusCodeMiddleware` converte automaticamente para a resposta HTTP correspondente:
